@@ -10,6 +10,7 @@ using Services.Contracts;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); // artık controller olmadan da razor pages kullanabileceğiz.
 
 builder.Services.AddDbContext<RepositoryContext>(options =>
 {
@@ -42,5 +43,6 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"
     );
+    app.MapRazorPages();
 });
 app.Run();

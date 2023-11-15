@@ -21,6 +21,9 @@
       {
         <tr>
           <td>@prd.ProductId</td>
+          <td>
+            <img class="border border-light rounded" src="@prd?.ImageUrl" alt="@prd?.ProductName" width="50">
+          </td>
           <td>@prd.ProductName</td>
           <td>@prd.Price.ToString("c")</td>
           <td>
@@ -34,6 +37,14 @@
                 Edit
               </a>
               <a
+                class="btn btn-danger"
+                asp-action="Delete"
+                asp-route-id="@prd.ProductId"
+              >
+                <i class="fa fa-remove"></i>
+                Delete
+              </a>
+              <a
                 class="btn btn-info"
                 asp-action="Get"
                 asp-controller="Product"
@@ -43,14 +54,6 @@
               >
                 <i class="fa fa-search"></i>
                 Preview
-              </a>
-              <a
-                class="btn btn-danger"
-                asp-action="Delete"
-                asp-route-id="@prd.ProductId"
-              >
-                <i class="fa fa-remove"></i>
-                Delete
               </a>
             </div>
           </td>
