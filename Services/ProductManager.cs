@@ -2,6 +2,7 @@ using AutoMapper;
 using Entities.DTOs;
 using Entities.Models;
 using Entities.RequestParameters;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Extensions;
 using Repositories.UnitOfWorks;
 using Services.Contracts;
@@ -60,11 +61,28 @@ namespace Services
         {
             return await unitOfWork.GetRepository<Product>().GetAllAsync(x => x.ShowCase.Equals(true));
         }
+        // Inside ProductService
+        public async Task<int> GetTotalProductCount(ProductRequestParameters p)
+        {
+            var query = await unitOfWork.GetRepository<Product>().FilterProducts(p.CategoryId, p.SearchTerm, p.MinPrice, p.MaxPrice);
+            return await query.CountAsync();
+        }
 
         public async Task<IEnumerable<Product>> GetAllProductsWithDetails(ProductRequestParameters p)
         {
             var query = await unitOfWork.GetRepository<Product>().FilterProducts(p.CategoryId, p.SearchTerm, p.MinPrice, p.MaxPrice);
-            return query;
+            var totalCount = query.Count(); // Get the total count before pagination
+            var paginatedQuery = await query.ToPaginate(p.PageNumber, p.PageSize);
+
+            return paginatedQuery;
         }
+
+
+        public async Task<IEnumerable<Product>> GetLastestProducts(int n)
+        {
+            var products = await unitOfWork.GetRepository<Product>().GetAllAsync();
+            return products.OrderByDescending(prd => prd.ProductId).Take(n);
+        }
+
     }
 }

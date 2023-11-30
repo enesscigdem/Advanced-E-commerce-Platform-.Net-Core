@@ -22,5 +22,11 @@ namespace Repositories.Extensions
 
             return query.Where(prd => prd.Price >= MinPrice && prd.Price <= MaxPrice);
         }
+        public static async Task<IEnumerable<Product>> ToPaginate(this IEnumerable<Product> products, int pageNumber, int pageSize)
+        {
+            return products
+            .Skip(((pageNumber - 1) * pageSize))
+            .Take(pageSize);
+        }
     }
 }
